@@ -1,41 +1,66 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
 import { Platform } from 'react-native';
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+const stonksOrange = '#FF7A00'; // Primary Orange from Logo
+const stonksBlue = '#007AFF'; // Primary Blue
+const stonksDarkBackground = '#0B1120'; // Rich Navy Dark 
+const stonksCardBackground = '#151E32'; // Lighter Navy for cards
+const stonksLightBackground = '#F8FAFC';
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    text: '#0B1120',
+    background: stonksLightBackground,
+    tint: stonksOrange,
+    card: '#FFFFFF',
+    border: '#E2E8F0',
+    icon: '#64748B',
+    profit: '#10B981', // green for actual profit numbers
+    loss: '#EF4444', 
+    primary: stonksOrange,
+    secondary: stonksBlue,
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    text: '#F8FAFC',
+    background: stonksDarkBackground,
+    tint: stonksOrange,
+    card: stonksCardBackground,
+    border: '#2A364F',
+    icon: '#94A3B8',
+    profit: '#10B981', // green for actual profit numbers
+    loss: '#EF4444',
+    primary: stonksOrange,
+    secondary: stonksBlue,
   },
+};
+
+export const Sizing = {
+  radius: 16,
+  padding: 16,
+  margin: 16,
+};
+
+export const Typography = {
+  sizes: {
+    small: 12,
+    base: 16,
+    large: 20,
+    xlarge: 24,
+    xxlarge: 32,
+    xxxlarge: 48,
+  },
+  weights: {
+    regular: '400' as const,
+    medium: '500' as const,
+    bold: '700' as const,
+    black: '900' as const,
+  }
 };
 
 export const Fonts = Platform.select({
   ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
     sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
     serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
     rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
     mono: 'ui-monospace',
   },
   default: {
@@ -43,11 +68,5 @@ export const Fonts = Platform.select({
     serif: 'serif',
     rounded: 'normal',
     mono: 'monospace',
-  },
-  web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
   },
 });

@@ -1,17 +1,20 @@
 {
   "expo": {
-    "name": "NetStonks",
+    "name": "NetStonks - E-Ticaret Kar Marjı Hesaplama",
     "slug": "NetStonks",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "netstonks",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yigityasar.netstonks"
     },
     "android": {
+      "package": "com.yigityasar.netstonks",
+      "versionCode": 2,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -38,11 +41,30 @@
             "backgroundColor": "#000000"
           }
         }
+      ],
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-6469408105371618~5771251361",
+          "iosAppId": "ca-app-pub-6469408105371618~5771251361"
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "7cfdcc98-22db-43d4-ac6e-77880580da3d"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/7cfdcc98-22db-43d4-ac6e-77880580da3d"
     }
   }
 }
