@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { StonksCard } from '../ui/StonksCard';
 import { Colors, Sizing, Typography } from '@/constants/theme';
 import { CalculationResults } from '@/utils/calculateMargin';
 import { Ionicons } from '@expo/vector-icons';
+import { useAppTheme } from '@/hooks/useAppTheme';
 
 interface ResultCardProps {
   results: CalculationResults | null;
@@ -12,7 +13,7 @@ interface ResultCardProps {
 
 export const ResultCard: React.FC<ResultCardProps> = ({ results }) => {
   const router = useRouter();
-  const theme = useColorScheme() ?? 'dark';
+  const theme = useAppTheme();
 
   if (!results) {
     return (
@@ -30,9 +31,53 @@ export const ResultCard: React.FC<ResultCardProps> = ({ results }) => {
 
   return (
     <StonksCard style={styles.container}>
-      <Text style={[styles.title, { color: Colors[theme].icon }]}>Performans Özeti</Text>
+      <Text style={[styles.title, { color: Colors[theme].icon }]}>Hesaplama Özeti</Text>
       
+      <View style={styles.detailsRow}>
+        <Text style={[styles.detailLabel, { color: Colors[theme].text, fontWeight: 'bold' }]}>Satış Fiyatı:</Text>
+        <Text style={[styles.detailValue, { color: Colors[theme].text, fontSize: Typography.sizes.large }]}>
+          {results.salesPrice.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺
+        </Text>
+      </View>
+
+      <View style={styles.divider} />
+
+      <View style={styles.detailsContainer}>
+        <View style={styles.detailsRow}>
+          <Text style={[styles.detailLabel, { color: Colors[theme].icon }]}>- Ürün Maliyeti:</Text>
+          <Text style={[styles.detailValue, { color: Colors[theme].icon }]}>
+            {results.baseCost.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺
+          </Text>
+        </View>
+
+        {results.baseExpenses > 0 && (
+          <View style={styles.detailsRow}>
+            <Text style={[styles.detailLabel, { color: Colors[theme].icon }]}>- Kargo & Ek Giderler:</Text>
+            <Text style={[styles.detailValue, { color: Colors[theme].icon }]}>
+              {results.baseExpenses.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺
+            </Text>
+          </View>
+        )}
+
+        <View style={styles.detailsRow}>
+          <Text style={[styles.detailLabel, { color: Colors[theme].icon }]}>- Pazaryeri Komisyonu:</Text>
+          <Text style={[styles.detailValue, { color: Colors[theme].icon }]}>
+            {results.commissionCost.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺
+          </Text>
+        </View>
+
+        <View style={styles.detailsRow}>
+          <Text style={[styles.detailLabel, { color: Colors[theme].icon }]}>- E-Ticaret Stopajı:</Text>
+          <Text style={[styles.detailValue, { color: Colors[theme].icon }]}>
+            {results.stopajCost.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.divider} />
+
       <View style={styles.mainResult}>
+        <Text style={[styles.title, { color: Colors[theme].icon, marginBottom: 8 }]}>NET {isProfit ? 'KÂR' : 'ZARAR'}</Text>
         <Text style={[
           styles.netProfit, 
           { 
@@ -42,19 +87,10 @@ export const ResultCard: React.FC<ResultCardProps> = ({ results }) => {
             textShadowRadius: 15
           }
         ]}>
-          {results.netProfit.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ₺
+          {results.netProfit.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺
         </Text>
         <Text style={[styles.profitMargin, { color: resultColor, textShadowColor: resultColor, textShadowOffset: { width: 0, height: 0 }, textShadowRadius: 5 }]}>
-          {isProfit ? '+' : ''}{results.profitMargin.toFixed(2)}%
-        </Text>
-      </View>
-
-      <View style={styles.divider} />
-
-      <View style={styles.detailsRow}>
-        <Text style={[styles.detailLabel, { color: Colors[theme].icon }]}>Toplam Maliyet:</Text>
-        <Text style={[styles.detailValue, { color: Colors[theme].text }]}>
-          {results.totalCost.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺
+          {isProfit ? '+' : ''}{results.profitMargin.toFixed(2)}% Marj
         </Text>
       </View>
     </StonksCard>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, StyleSheet, TextInputProps, useColorScheme } from 'react-native';
+import { View, TextInput, Text, StyleSheet, TextInputProps } from 'react-native';
 import { Colors, Sizing, Typography } from '@/constants/theme';
+import { useAppTheme } from '@/hooks/useAppTheme';
 
 interface InputProps extends TextInputProps {
   label: string;
@@ -8,7 +9,7 @@ interface InputProps extends TextInputProps {
 }
 
 export const Input: React.FC<InputProps> = ({ label, leftIcon, style, onFocus, onBlur, ...props }) => {
-  const theme = useColorScheme() ?? 'dark';
+  const theme = useAppTheme();
   const [isFocused, setIsFocused] = useState(false);
   
   return (
@@ -17,8 +18,8 @@ export const Input: React.FC<InputProps> = ({ label, leftIcon, style, onFocus, o
       <View style={[
         styles.inputContainer, 
         { 
-          backgroundColor: 'rgba(255, 255, 255, 0.03)',
-          borderColor: isFocused ? Colors[theme].tint : 'rgba(255, 255, 255, 0.1)',
+          backgroundColor: theme === 'light' ? 'rgba(0,0,0,0.02)' : 'rgba(255, 255, 255, 0.03)',
+          borderColor: isFocused ? Colors[theme].tint : theme === 'light' ? 'rgba(0,0,0,0.1)' : 'rgba(255, 255, 255, 0.1)',
           shadowColor: isFocused ? Colors[theme].tint : 'transparent',
           shadowOffset: { width: 0, height: 0 },
           shadowOpacity: isFocused ? 0.6 : 0,
@@ -28,7 +29,7 @@ export const Input: React.FC<InputProps> = ({ label, leftIcon, style, onFocus, o
         {leftIcon && <View style={styles.iconContainer}>{leftIcon}</View>}
         <TextInput
           style={[styles.input, { color: Colors[theme].text }]}
-          placeholderTextColor={'rgba(255, 255, 255, 0.3)'}
+          placeholderTextColor={theme === 'light' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.3)'}
           keyboardType="decimal-pad"
           onFocus={(e) => {
             setIsFocused(true);

@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, Switch, StyleSheet, useColorScheme } from 'react-native';
+import { View, Text, Switch, StyleSheet } from 'react-native';
 import { Colors, Typography, Sizing } from '@/constants/theme';
+import { useAppTheme } from '@/hooks/useAppTheme';
 
 interface VATSwitchProps {
   label: string;
@@ -9,15 +10,15 @@ interface VATSwitchProps {
 }
 
 export const VATSwitch: React.FC<VATSwitchProps> = ({ label, value, onValueChange }) => {
-  const theme = useColorScheme() ?? 'dark';
+  const theme = useAppTheme();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: Colors[theme].card, borderColor: Colors[theme].border }]}>
       <Text style={[styles.label, { color: Colors[theme].text }]}>{label}</Text>
       <Switch
-        trackColor={{ false: 'rgba(255, 255, 255, 0.1)', true: Colors[theme].tint }}
+        trackColor={{ false: theme === 'light' ? 'rgba(0,0,0,0.1)' : 'rgba(255, 255, 255, 0.1)', true: Colors[theme].tint }}
         thumbColor={'#fff'}
-        ios_backgroundColor={'rgba(255, 255, 255, 0.1)'}
+        ios_backgroundColor={theme === 'light' ? 'rgba(0,0,0,0.1)' : 'rgba(255, 255, 255, 0.1)'}
         onValueChange={onValueChange}
         value={value}
         style={styles.switch}

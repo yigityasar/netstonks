@@ -1,14 +1,15 @@
 import React from 'react';
-import { StyleSheet, ViewProps, useColorScheme, View } from 'react-native';
+import { StyleSheet, ViewProps, View } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { Colors, Sizing } from '@/constants/theme';
+import { useAppTheme } from '@/hooks/useAppTheme';
 
 interface StonksCardProps extends ViewProps {
   children: React.ReactNode;
 }
 
 export const StonksCard: React.FC<StonksCardProps> = ({ children, style, ...props }) => {
-  const theme = useColorScheme() ?? 'dark';
+  const theme = useAppTheme();
   const backgroundColor = Colors[theme].card;
   const borderColor = Colors[theme].border;
 
@@ -16,7 +17,7 @@ export const StonksCard: React.FC<StonksCardProps> = ({ children, style, ...prop
     <View style={[styles.container, { borderColor }, style]} {...props}>
       <BlurView
         intensity={40}
-        tint="dark"
+        tint={theme === 'dark' ? 'dark' : 'light'}
         style={[
           StyleSheet.absoluteFill,
           { backgroundColor }

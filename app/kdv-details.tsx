@@ -1,15 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, useColorScheme, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Colors, Sizing, Typography } from '@/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { StonksCard } from '@/components/ui/StonksCard';
 import { MeshBackground } from '@/components/ui/MeshBackground';
+import { ThemeProvider, useAppTheme } from '@/hooks/useAppTheme';
 
-export default function KDVDetailsScreen() {
+function KDVDetailsContent() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const theme = useColorScheme() ?? 'dark';
+  const theme = useAppTheme();
 
   // Parse params
   const productVat = Number(params.productVat) || 0;
@@ -78,6 +79,14 @@ export default function KDVDetailsScreen() {
         </StonksCard>
       </ScrollView>
     </View>
+  );
+}
+
+export default function KDVDetailsScreen() {
+  return (
+    <ThemeProvider theme="dark">
+      <KDVDetailsContent />
+    </ThemeProvider>
   );
 }
 

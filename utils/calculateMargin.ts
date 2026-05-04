@@ -11,6 +11,9 @@ export interface CalculationInputs {
 }
 
 export interface CalculationResults {
+  salesPrice: number;
+  baseCost: number;
+  baseExpenses: number;
   totalCost: number;
   netProfit: number;
   profitMargin: number;
@@ -30,7 +33,8 @@ export const calculateMargin = (inputs: CalculationInputs): CalculationResults =
 
   const commissionCost = salesPrice * (commissionRate / 100);
   const stopajCost = salesPrice * (stopajRate / 100);
-  const expenses = packaging + shipping + extra + commissionCost;
+  const baseExpenses = packaging + shipping + extra;
+  const expenses = baseExpenses + commissionCost;
 
   // Expenses are assumed to include 20% VAT
   const expensesVat = expenses - (expenses / 1.20);
@@ -54,6 +58,9 @@ export const calculateMargin = (inputs: CalculationInputs): CalculationResults =
   const taxPayable = salesVat - totalPurchaseVat;
 
   return {
+    salesPrice,
+    baseCost: cost,
+    baseExpenses,
     totalCost,
     netProfit,
     profitMargin,

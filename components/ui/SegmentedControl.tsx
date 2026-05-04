@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, useColorScheme } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Colors, Sizing, Typography } from '@/constants/theme';
+import { useAppTheme } from '@/hooks/useAppTheme';
 
 interface SegmentedControlProps {
   label: string;
@@ -10,7 +11,7 @@ interface SegmentedControlProps {
 }
 
 export const SegmentedControl: React.FC<SegmentedControlProps> = ({ label, options, selectedValue, onSelect }) => {
-  const theme = useColorScheme() ?? 'dark';
+  const theme = useAppTheme();
 
   return (
     <View style={styles.container}>
