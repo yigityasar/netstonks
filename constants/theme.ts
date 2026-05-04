@@ -1,52 +1,44 @@
 import { Platform } from 'react-native';
 
-const stonksOrange = '#FF7A00'; // Primary Orange from Logo
-const stonksBlue = '#007AFF'; // Primary Blue
-const stonksDarkBackground = '#0B1120'; // Rich Navy Dark 
-const stonksCardBackground = '#151E32'; // Lighter Navy for cards
-const stonksLightBackground = '#F8FAFC';
+const stonksOrange = '#FF5A00'; // Electric Orange for neon effects
+const stonksBlue = '#00C3FF'; // Cyan for mesh gradient
+const stonksDarkBackground = '#0A0F1C'; // Deep midnight blue
+const stonksCardBackground = 'rgba(255, 255, 255, 0.03)'; // Frosted glass baseline
+const stonksBorder = 'rgba(255, 255, 255, 0.1)';
+
+const midnightTheme = {
+  text: '#F8FAFC',
+  background: stonksDarkBackground,
+  tint: stonksOrange,
+  card: stonksCardBackground,
+  border: stonksBorder,
+  icon: '#94A3B8',
+  profit: '#00E676', // Brighter neon green for profit
+  loss: '#FF3B30', // Neon red for loss
+  primary: stonksOrange,
+  secondary: stonksBlue,
+  glassHighlight: 'rgba(255, 255, 255, 0.05)',
+};
 
 export const Colors = {
-  light: {
-    text: '#0B1120',
-    background: stonksLightBackground,
-    tint: stonksOrange,
-    card: '#FFFFFF',
-    border: '#E2E8F0',
-    icon: '#64748B',
-    profit: '#10B981', // green for actual profit numbers
-    loss: '#EF4444', 
-    primary: stonksOrange,
-    secondary: stonksBlue,
-  },
-  dark: {
-    text: '#F8FAFC',
-    background: stonksDarkBackground,
-    tint: stonksOrange,
-    card: stonksCardBackground,
-    border: '#2A364F',
-    icon: '#94A3B8',
-    profit: '#10B981', // green for actual profit numbers
-    loss: '#EF4444',
-    primary: stonksOrange,
-    secondary: stonksBlue,
-  },
+  light: midnightTheme,
+  dark: midnightTheme,
 };
 
 export const Sizing = {
-  radius: 16,
-  padding: 16,
+  radius: 24, // Softer curves for premium feel
+  padding: 20,
   margin: 16,
 };
 
 export const Typography = {
   sizes: {
-    small: 12,
+    small: 13,
     base: 16,
     large: 20,
     xlarge: 24,
-    xxlarge: 32,
-    xxxlarge: 48,
+    xxlarge: 34,
+    xxxlarge: 52,
   },
   weights: {
     regular: '400' as const,

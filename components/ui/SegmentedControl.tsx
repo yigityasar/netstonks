@@ -10,12 +10,12 @@ interface SegmentedControlProps {
 }
 
 export const SegmentedControl: React.FC<SegmentedControlProps> = ({ label, options, selectedValue, onSelect }) => {
-  const theme = useColorScheme() ?? 'light';
+  const theme = useColorScheme() ?? 'dark';
 
   return (
     <View style={styles.container}>
       <Text style={[styles.label, { color: Colors[theme].icon }]}>{label}</Text>
-      <View style={[styles.optionsContainer, { backgroundColor: Colors[theme].background, borderColor: Colors[theme].border }]}>
+      <View style={[styles.optionsContainer]}>
         {options.map((option) => {
           const isSelected = selectedValue === option;
           return (
@@ -23,14 +23,15 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({ label, optio
               key={option}
               style={[
                 styles.option,
-                isSelected && { backgroundColor: Colors[theme].tint }
+                isSelected && { backgroundColor: Colors[theme].tint, borderColor: Colors[theme].tint }
               ]}
               onPress={() => onSelect(option)}
+              activeOpacity={0.7}
             >
               <Text 
                 style={[
                   styles.optionText, 
-                  { color: isSelected ? '#fff' : Colors[theme].text },
+                  { color: isSelected ? '#fff' : Colors[theme].icon },
                   isSelected && styles.optionTextSelected
                 ]}
               >
@@ -53,18 +54,25 @@ const styles = StyleSheet.create({
     fontWeight: Typography.weights.medium,
     marginBottom: 8,
     marginLeft: 4,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   optionsContainer: {
     flexDirection: 'row',
     borderRadius: Sizing.radius,
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
     borderWidth: 1,
-    overflow: 'hidden',
-    height: 48,
+    borderColor: 'rgba(255, 255, 255, 0.05)',
+    padding: 4,
+    height: 54,
   },
   option: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: Sizing.radius - 4,
+    borderWidth: 1,
+    borderColor: 'transparent',
   },
   optionText: {
     fontSize: Typography.sizes.base,

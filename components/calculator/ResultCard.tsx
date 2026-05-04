@@ -12,7 +12,7 @@ interface ResultCardProps {
 
 export const ResultCard: React.FC<ResultCardProps> = ({ results }) => {
   const router = useRouter();
-  const theme = useColorScheme() ?? 'light';
+  const theme = useColorScheme() ?? 'dark';
 
   if (!results) {
     return (
@@ -33,10 +33,18 @@ export const ResultCard: React.FC<ResultCardProps> = ({ results }) => {
       <Text style={[styles.title, { color: Colors[theme].icon }]}>Performans Özeti</Text>
       
       <View style={styles.mainResult}>
-        <Text style={[styles.netProfit, { color: resultColor }]}>
+        <Text style={[
+          styles.netProfit, 
+          { 
+            color: resultColor,
+            textShadowColor: resultColor,
+            textShadowOffset: { width: 0, height: 0 },
+            textShadowRadius: 15
+          }
+        ]}>
           {results.netProfit.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ₺
         </Text>
-        <Text style={[styles.profitMargin, { color: resultColor }]}>
+        <Text style={[styles.profitMargin, { color: resultColor, textShadowColor: resultColor, textShadowOffset: { width: 0, height: 0 }, textShadowRadius: 5 }]}>
           {isProfit ? '+' : ''}{results.profitMargin.toFixed(2)}%
         </Text>
       </View>
@@ -44,20 +52,11 @@ export const ResultCard: React.FC<ResultCardProps> = ({ results }) => {
       <View style={styles.divider} />
 
       <View style={styles.detailsRow}>
-        <Text style={[styles.detailLabel, { color: Colors[theme].text }]}>Toplam Maliyet:</Text>
+        <Text style={[styles.detailLabel, { color: Colors[theme].icon }]}>Toplam Maliyet:</Text>
         <Text style={[styles.detailValue, { color: Colors[theme].text }]}>
           {results.totalCost.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺
         </Text>
       </View>
-
-      <TouchableOpacity 
-        style={[styles.kdvButton, { backgroundColor: Colors[theme].background, borderColor: Colors[theme].border }]}
-        onPress={() => router.push({ pathname: '/kdv-details', params: { ...results } })}
-      >
-        <Ionicons name="document-text-outline" size={20} color={Colors[theme].text} />
-        <Text style={[styles.kdvButtonText, { color: Colors[theme].text }]}>KDV Detaylarını Gör</Text>
-        <Ionicons name="chevron-forward" size={20} color={Colors[theme].icon} />
-      </TouchableOpacity>
     </StonksCard>
   );
 };
@@ -98,13 +97,14 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: '#ffffff20',
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
     marginBottom: 16,
   },
   detailsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 20,
+    alignItems: 'center',
   },
   detailLabel: {
     fontSize: Typography.sizes.base,
@@ -116,9 +116,20 @@ const styles = StyleSheet.create({
   kdvButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
+    padding: 8,
+    paddingRight: 16,
     borderRadius: Sizing.radius,
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
     borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.05)',
+  },
+  kdvIconBg: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   kdvButtonText: {
     flex: 1,

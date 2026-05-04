@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, ViewProps, useColorScheme } from 'react-native';
+import { StyleSheet, ViewProps, useColorScheme, View } from 'react-native';
+import { BlurView } from 'expo-blur';
 import { Colors, Sizing } from '@/constants/theme';
 
 interface StonksCardProps extends ViewProps {
@@ -7,36 +8,37 @@ interface StonksCardProps extends ViewProps {
 }
 
 export const StonksCard: React.FC<StonksCardProps> = ({ children, style, ...props }) => {
-  const theme = useColorScheme() ?? 'light';
+  const theme = useColorScheme() ?? 'dark';
   const backgroundColor = Colors[theme].card;
   const borderColor = Colors[theme].border;
 
   return (
-    <View 
-      style={[
-        styles.card, 
-        { backgroundColor, borderColor, shadowColor: Colors[theme].text }, 
-        style
-      ]} 
-      {...props}
-    >
-      {children}
+    <View style={[styles.container, { borderColor }, style]} {...props}>
+      <BlurView
+        intensity={40}
+        tint="dark"
+        style={[
+          StyleSheet.absoluteFill,
+          { backgroundColor }
+        ]}
+      />
+      <View style={styles.content}>
+        {children}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  card: {
-    borderRadius: Sizing.radius,
-    padding: Sizing.padding,
+  container: {
     marginVertical: Sizing.margin / 2,
+    borderRadius: Sizing.radius,
+    overflow: 'hidden',
     borderWidth: 1,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 3,
+  },
+  content: {
+    padding: Sizing.padding,
+    position: 'relative',
+    zIndex: 1,
   },
 });

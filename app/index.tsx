@@ -3,6 +3,7 @@ import { StyleSheet, ScrollView, Text, View, useColorScheme, KeyboardAvoidingVie
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
+import { BlurView } from 'expo-blur';
 import AdBanner from '@/components/calculator/AdBanner';
 import { Colors, Sizing, Typography } from '@/constants/theme';
 import { Input } from '@/components/ui/Input';
@@ -13,6 +14,7 @@ import { ResultCard } from '@/components/calculator/ResultCard';
 import { calculateMargin, CalculationResults } from '@/utils/calculateMargin';
 import { Ionicons } from '@expo/vector-icons';
 import { useInterstitialAd } from '@/hooks/useInterstitialAd';
+import { MeshBackground } from '@/components/ui/MeshBackground';
 
 export default function CalculatorScreen() {
   const theme = useColorScheme() ?? 'light';
@@ -111,6 +113,7 @@ export default function CalculatorScreen() {
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: Colors[theme].background }]}>
+      <MeshBackground />
       
       <Modal
         visible={isInfoModalVisible}
@@ -119,13 +122,14 @@ export default function CalculatorScreen() {
         onRequestClose={() => setInfoModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
+          <BlurView intensity={40} tint="dark" style={StyleSheet.absoluteFill} />
           <View style={[styles.modalContent, { backgroundColor: Colors[theme].card, borderColor: Colors[theme].border }]}>
             <Text style={[styles.modalTitle, { color: Colors[theme].text }]}>Bilgilendirme</Text>
-            <Text style={[styles.modalText, { color: Colors[theme].text }]}>
+            <Text style={[styles.modalText, { color: Colors[theme].icon }]}>
               Hesaplanan kâr ve KDV değerleri yaklaşık sonuçlar vermekte olup fiyatlandırma sürecinizde size yardımcı olması amacıyla tasarlanmıştır. Uygulanan komisyon ve vergi oranları dönemsel veya kategori bazlı değişiklik gösterebileceğinden, lütfen nihai fiyatlarınızı belirlerken tüm verileri dikkatlice kontrol ediniz. Olası yanlış fiyatlandırmalardan ve zararlardan uygulamamız sorumlu tutulamaz.
             </Text>
             <TouchableOpacity 
-              style={[styles.modalButton, { backgroundColor: Colors.dark.tint }]} 
+              style={[styles.modalButton, { backgroundColor: Colors[theme].tint, shadowColor: Colors[theme].tint, shadowOpacity: 0.5, shadowRadius: 10, shadowOffset: {width: 0, height: 0} }]} 
               onPress={() => setInfoModalVisible(false)}
             >
               <Text style={styles.modalButtonText}>Anladım</Text>
@@ -143,21 +147,43 @@ export default function CalculatorScreen() {
         >
           <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} keyboardShouldPersistTaps="handled">
           
-          <View style={styles.topHeaderCard}>
-            <TouchableOpacity style={styles.infoButtonAbsolute} onPress={showInfoAlert}>
-              <Ionicons name="information-circle-outline" size={28} color={'#0F172A'} />
-            </TouchableOpacity>
+          <StonksCard style={styles.topHeaderCard}>
+            <View style={styles.headerTopRow}>
+              <Text style={styles.headerTitle}>Kârınızı Maksimize Edin</Text>
+              <TouchableOpacity onPress={showInfoAlert} style={styles.infoButtonBg}>
+                <Ionicons name="information-circle-outline" size={24} color={Colors[theme].tint} />
+              </TouchableOpacity>
+            </View>
             
-            <Image 
-              source={require('@/assets/images/netstonks_logo_png.png')} 
-              style={styles.logo} 
-              resizeMode="contain"
-            />
-            
-            <Text style={styles.headerSubtitle}>
-              Pazaryeri komisyon ve KDV dahil net kârınızı saniyeler içinde hesaplayın.
-            </Text>
-          </View>
+            <View style={styles.headerContent}>
+              <Text style={styles.headerSubtitle}>
+                Aşağıdaki alanlara ürün maliyetinizi, giderlerinizi ve pazaryeri kesintilerini girerek net kârınızı saniyeler içinde hesaplayın.
+              </Text>
+              
+              <View style={styles.stepsContainer}>
+                <View style={styles.stepItem}>
+                  <View style={styles.stepIconWrapper}>
+                    <Ionicons name="pricetag" size={14} color={Colors[theme].tint} />
+                  </View>
+                  <Text style={styles.stepText}>Maliyet</Text>
+                </View>
+                <View style={styles.stepDivider} />
+                <View style={styles.stepItem}>
+                  <View style={styles.stepIconWrapper}>
+                    <Ionicons name="calculator" size={14} color={Colors[theme].tint} />
+                  </View>
+                  <Text style={styles.stepText}>Giderler</Text>
+                </View>
+                <View style={styles.stepDivider} />
+                <View style={styles.stepItem}>
+                  <View style={[styles.stepIconWrapper, { backgroundColor: 'rgba(0, 230, 118, 0.1)' }]}>
+                    <Ionicons name="cash" size={14} color={Colors[theme].profit} />
+                  </View>
+                  <Text style={[styles.stepText, { color: Colors[theme].profit }]}>Net Kâr</Text>
+                </View>
+              </View>
+            </View>
+          </StonksCard>
 
           <StonksCard>
             <Input 
@@ -235,12 +261,12 @@ export default function CalculatorScreen() {
           </StonksCard>
 
           <TouchableOpacity 
-            style={styles.calculateButtonWrapper}
+            style={[styles.calculateButtonWrapper, { shadowColor: Colors[theme].tint, shadowOpacity: 0.6, shadowRadius: 20, shadowOffset: {width: 0, height: 0} }]}
             onPress={handleCalculate}
             activeOpacity={0.8}
           >
             <LinearGradient
-              colors={['#FF7A00', '#007AFF']}
+              colors={[Colors[theme].tint, '#FF8A00']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.calculateButton}
@@ -274,41 +300,80 @@ const styles = StyleSheet.create({
     paddingTop: Sizing.padding,
   },
   topHeaderCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: Sizing.radius,
-    paddingHorizontal: Sizing.padding,
-    paddingVertical: Sizing.padding * 1.2,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: Sizing.margin,
-    shadowColor: '#FF7A00',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.15,
-    shadowRadius: 10,
-    elevation: 6,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    position: 'relative',
-  },
-  infoButtonAbsolute: {
-    position: 'absolute',
-    top: Sizing.padding,
-    right: Sizing.padding,
-    zIndex: 10,
-    padding: 4,
-  },
-  logo: {
-    width: '90%',
-    height: 100,
-    marginBottom: 8,
-  },
-  headerSubtitle: {
-    color: '#64748B',
-    fontSize: Typography.sizes.small + 2,
-    fontWeight: Typography.weights.medium,
-    textAlign: 'center',
-    paddingHorizontal: Sizing.padding,
-  },
+            marginBottom: Sizing.margin,
+            borderWidth: 1,
+            padding: Sizing.padding,
+            backgroundColor: 'rgba(255, 255, 255, 0.02)',
+          },
+          headerTopRow: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 16,
+          },
+          infoButtonBg: {
+            width: 32,
+            height: 32,
+            borderRadius: 16,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'rgba(255, 90, 0, 0.1)',
+            borderWidth: 1,
+            borderColor: 'rgba(255, 90, 0, 0.2)',
+          },
+          headerContent: {
+            marginTop: 0,
+          },
+          headerTitle: {
+            color: '#FFFFFF',
+            fontSize: Typography.sizes.large,
+            fontWeight: Typography.weights.bold,
+            flex: 1,
+          },
+          headerSubtitle: {
+            color: '#94A3B8',
+            fontSize: Typography.sizes.small + 1,
+            fontWeight: Typography.weights.medium,
+            lineHeight: 20,
+            marginBottom: 20,
+          },
+          stepsContainer: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            backgroundColor: 'rgba(0,0,0,0.2)',
+            padding: 12,
+            borderRadius: Sizing.radius - 4,
+            borderWidth: 1,
+            borderColor: 'rgba(255,255,255,0.03)',
+          },
+          stepItem: {
+            alignItems: 'center',
+            justifyContent: 'center',
+            flex: 1,
+          },
+          stepIconWrapper: {
+            width: 28,
+            height: 28,
+            borderRadius: 14,
+            backgroundColor: 'rgba(255, 90, 0, 0.1)',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 6,
+          },
+          stepText: {
+            color: '#CBD5E1',
+            fontSize: Typography.sizes.small - 1,
+            fontWeight: Typography.weights.bold,
+            textTransform: 'uppercase',
+            letterSpacing: 0.5,
+          },
+          stepDivider: {
+            width: 1,
+            height: 24,
+            backgroundColor: 'rgba(255,255,255,0.1)',
+            marginHorizontal: 8,
+          },
   title: {
     fontSize: Typography.sizes.xxlarge,
     fontWeight: Typography.weights.black,
@@ -321,12 +386,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   calculateButtonWrapper: {
-    marginVertical: Sizing.margin,
-    shadowColor: '#FF7A00',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
-    elevation: 8,
+    marginVertical: Sizing.margin * 1.5,
     borderRadius: Sizing.radius,
   },
   calculateButton: {
@@ -343,7 +403,6 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: Sizing.padding,
@@ -372,8 +431,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalButtonText: {
-    color: '#121212',
+    color: '#FFFFFF',
     fontWeight: Typography.weights.bold,
     fontSize: Typography.sizes.base,
+    letterSpacing: 1,
   }
 });
